@@ -2,6 +2,8 @@ import React from 'react';
 import TodoList from "./components/TodoList"
 import TodoForm from "./components/TodoForm"
 
+import "./components/Todo.css"
+
 const todo = [
   {
   name: "dishes",
@@ -38,14 +40,36 @@ class App extends React.Component {
     })
   }
 
+  toggleTask = (itemId) => {
+    console.log(itemId)
+    this.setState({
+      todo: this.state.todo.map((item)=> {
+        if(itemId === item.id){
+          return {
+            ...item,
+            completed: !item.completed
+          }
+        }
+        return item
+      })
+    })
+  }
+
+  clearComplete = (event) => {
+    event.preventDefault()
+    this.setState({
+      todo: this.state.todo.filter((item)=>!item.completed)
+    })
+  }
+
   render() {
     return (
       <div className="App">
         <div className="header">
           <h2>Welcome to your Todo App!</h2>
-          <TodoForm addItem={this.addItem}/>
+          <TodoForm addItem={this.addItem} />
         </div> 
-        <TodoList todo={this.state.todo}/>
+        <TodoList todo={this.state.todo} toggleTask={this.toggleTask} clearComplete={this.clearComplete}/>
       </div>
     );
   }
